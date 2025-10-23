@@ -88,11 +88,13 @@ Esta seção detalha os cenários de teste derivados de cada História de Usuár
 
 ### Módulo: Autenticação
 #### US-AUTH-001: Registro de Usuário
-* **CT-AUTH-001.1 (Positivo):** Realizar registro com sucesso usando nome, e-mail válido e senha forte. (Validar redirecionamento e autenticação).
-* **CT-AUTH-001.2 (Negativo):** Tentar registrar com um e-mail já cadastrado. (Validar mensagem de erro).
-* **CT-AUTH-001.3 (Negativo):** Tentar registrar com formato de e-mail inválido (ex: "teste.com", "teste@"). (Validar erro de validação inline).
-* **CT-AUTH-001.4 (Negativo):** Tentar registrar com campos obrigatórios em branco. (Validar erro).
-* **CT-AUTH-001.5 (Negativo):** Tentar registrar com senha que não atende aos critérios (ex: muito curta). (Validar erro).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-AUTH-001.1 | Realizar registro com sucesso (caminho feliz) | O usuário está na página de registro. O e-mail de teste não existe no banco. | 1. Preencher o campo "nome" com um nome válido.<br>2. Preencher o campo "email" com um e-mail novo e válido.<br>3. Preencher o campo "senha" com uma senha forte (conforme critérios).<br>4. Clicar no botão "Registrar". | O usuário é registrado com sucesso, é redirecionado para a Home (logado) ou para a página de Login. | nome: "Usuário Teste"<br>email: "novo_usuario_[timestamp]@teste.com"<br>senha: "Senha@123" |
+| CT-AUTH-001.2 | Tentar registrar com e-mail duplicado | O e-mail "existente@teste.com" já está cadastrado no banco. | 1. Preencher os campos "nome" e "senha".<br>2. Preencher o campo "email" com "existente@teste.com".<br>3. Clicar no botão "Registrar". | Uma mensagem de erro clara (ex: "Este e-mail já está em uso") é exibida. O usuário não é registrado. | email: "existente@teste.com" |
+| CT-AUTH-001.3 | Tentar registrar com e-mail inválido | O usuário está na página de registro. | 1. Preencher os campos "nome" e "senha".<br>2. Preencher o campo "email" com um valor inválido.<br>3. Clicar no botão "Registrar" (ou desfocar o campo). | Uma mensagem de validação (ex: "Formato de e-mail inválido") é exibida. O formulário não é enviado. | email: "teste.com"<br>email: "teste@"<br>email: " " |
+| CT-AUTH-001.4 | Tentar registrar com campos obrigatórios em branco | O usuário está na página de registro. | 1. Deixar o campo "nome" (ou "email", ou "senha") em branco.<br>2. Clicar no botão "Registrar". | Mensagens de validação são exibidas para cada campo obrigatório (ex: "Campo obrigatório"). O formulário não é enviado. | nome: "" (vazio)<br>email: "" (vazio) |
+| CT-AUTH-001.5 | Tentar registrar com senha fraca | O usuário está na página de registro. | 1. Preencher "nome" e "email".<br>2. Preencher o campo "senha" com um valor que não atende aos critérios (ex: "123").<br>3. Clicar no botão "Registrar". | Uma mensagem de erro (ex: "A senha deve ter...") é exibida. | senha: "12345" |
 
 #### US-AUTH-002: Login de Usuário
 * **CT-AUTH-002.1 (Positivo):** Realizar login com credenciais válidas. (Validar redirecionamento para Home e presença de token JWT no localStorage/sessionStorage).
