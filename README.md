@@ -6,24 +6,24 @@ DESAFIO FINAL ESTAGIO/
 │   ├── historias_de_usuario.md
 │   └── plano_de_testes.md
 │
-└── testes/ 
-    ├── ui/                    
-    │   ├── 01_auth.robot         
-    │   ├── 02_home_nav.robot     
-    │   ├── 03_fluxo_filmes.robot 
+└── testes/
+    ├── ui/
+    │   ├── 01_auth.robot
+    │   ├── 02_home_nav.robot
+    │   ├── 03_fluxo_filmes.robot
     │   └── 04_fluxo_reserva.robot
     │
-    ├── api/                   
-    │   ├── 01_auth_api.robot    
-    │   ├── 02_movies_api.robot   
-    │   └── 03_reserva_api.robot  
+    ├── api/
+    │   ├── 01_auth_api.robot
+    │   ├── 02_movies_api.robot
+    │   └── 03_reserva_api.robot
     │
-    ├── resources/         
+    ├── resources/
     │   ├── common_keywords.robot
-    │   ├── ui_keywords.robot     
-    │   ├── api_keywords.robot   
-    │   └── variables.robot      
+    │   ├── ui_keywords.robot
+    │   ├── api_keywords.robot
+    │   └── variables.robot
     │
-    ├── .gitignore    
-    ├── README.md              
-    └── requirements.txt        
+    ├── .gitignore
+    ├── README.md
+    └── requirements.txt
