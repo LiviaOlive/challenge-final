@@ -1,5 +1,4 @@
 # Plano de Testes para Cinema App
----
 
 # Histórias de Usuário do Cinema App
 
