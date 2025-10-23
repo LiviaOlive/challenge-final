@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-10-23T19:58:20.920729" rpa="false" schemaversion="5">
+<suite id="s1" name="01 Auth Api" source="C:\Users\livia\OneDrive\Documentos\PROGRAMAÇÃO\estagio\desafio final estagio\testes\api\01_auth_api.robot">
+<kw name="Create Session" owner="RequestsLibrary" type="SETUP">
+<msg time="2025-10-23T19:58:21.166842" level="INFO">Creating Session using : alias=api, url=http://localhost:3000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-23T19:58:21.166056" elapsed="0.000964"/>
+</kw>
+<test id="s1-t1" name="Register User Successfully" line="16">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-23T19:58:21.168227" level="INFO">${ts} = 1761260301168</msg>
+<var>${ts}</var>
+<arg>str(int(time.time()*1000))</arg>
+<arg>modules=time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-23T19:58:21.167927" elapsed="0.000328"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-10-23T19:58:21.168625" level="INFO">${email} = user_1761260301168@example.com</msg>
+<var>${email}</var>
+<arg>user_${ts}@example.com</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-10-23T19:58:21.168472" elapsed="0.000190"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-23T19:58:21.169145" level="INFO">${payload} = {'name': 'Robot Test User', 'email': 'user_1761260301168@example.com', 'password': 'Senha@123'}</msg>
+<var>${payload}</var>
+<arg>name=Robot Test User</arg>
+<arg>email=${email}</arg>
+<arg>password=Senha@123</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-23T19:58:21.168866" elapsed="0.000304"/>
+</kw>
+<kw name="Post Request" owner="RequestsLibrary">
+<msg time="2025-10-23T19:58:21.169335" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:25.275224" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AD8590&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:29.536381" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AE8A50&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:34.031473" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AE8CD0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:38.129071" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A81CD0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/register</arg>
+<arg>json=${payload}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<status status="FAIL" start="2025-10-23T19:58:21.169312" elapsed="17.086754">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A81CD0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:38.256347" elapsed="0.000052"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${body}</var>
+<arg>response.json()</arg>
+<arg>response=${response}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:38.256551" elapsed="0.000018"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${body['success']}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:38.256688" elapsed="0.000017"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${body['data']['email']}</arg>
+<arg>${email}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:38.256821" elapsed="0.000017"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${body['data']['token']}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:38.256947" elapsed="0.000017"/>
+</kw>
+<doc>CT-AUTH-001.1 - Registrar usuário via API (caminho feliz)</doc>
+<status status="FAIL" start="2025-10-23T19:58:21.167135" elapsed="17.090009">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A81CD0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</test>
+<test id="s1-t2" name="Login With Valid Credentials" line="28">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-23T19:58:38.258450" level="INFO">${ts} = 1761260318258</msg>
+<var>${ts}</var>
+<arg>str(int(time.time()*1000))</arg>
+<arg>modules=time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-23T19:58:38.258171" elapsed="0.000304"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-10-23T19:58:38.258751" level="INFO">${email} = login_user_1761260318258@example.com</msg>
+<var>${email}</var>
+<arg>login_user_${ts}@example.com</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-10-23T19:58:38.258614" elapsed="0.000158"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-10-23T19:58:38.259048" level="INFO">${password} = Senha@123</msg>
+<var>${password}</var>
+<arg>Senha@123</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-10-23T19:58:38.258940" elapsed="0.000130"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-23T19:58:38.259428" level="INFO">${payload_reg} = {'name': 'Login User', 'email': 'login_user_1761260318258@example.com', 'password': 'Senha@123'}</msg>
+<var>${payload_reg}</var>
+<arg>name=Login User</arg>
+<arg>email=${email}</arg>
+<arg>password=${password}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-23T19:58:38.259206" elapsed="0.000245"/>
+</kw>
+<kw name="Post Request" owner="RequestsLibrary">
+<msg time="2025-10-23T19:58:38.259610" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:42.348300" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A82B10&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:46.642490" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A5E7B0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:51.139919" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AB9D00&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:55.236902" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA140&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</msg>
+<var>${resp_reg}</var>
+<arg>api</arg>
+<arg>/auth/register</arg>
+<arg>json=${payload_reg}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<status status="FAIL" start="2025-10-23T19:58:38.259588" elapsed="16.986606">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA140&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${resp_reg.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.246512" elapsed="0.000029"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${payload_login}</var>
+<arg>email=${email}</arg>
+<arg>password=${password}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.246779" elapsed="0.000022"/>
+</kw>
+<kw name="Post Request" owner="RequestsLibrary">
+<msg time="2025-10-23T19:58:55.247037" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${payload_login}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.247014" elapsed="0.000319"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.247518" elapsed="0.000020"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${body}</var>
+<arg>response.json()</arg>
+<arg>response=${response}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.247668" elapsed="0.000018"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${body['success']}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.247817" elapsed="0.000018"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${body['data']['email']}</arg>
+<arg>${email}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.247956" elapsed="0.000018"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${body['data']['token']}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-10-23T19:58:55.248092" elapsed="0.000017"/>
+</kw>
+<doc>CT-AUTH-002.1 - Login com credenciais válidas (API)</doc>
+<status status="FAIL" start="2025-10-23T19:58:38.257822" elapsed="16.990481">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA140&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</test>
+<test id="s1-t3" name="Login With Incorrect Password" line="44">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-10-23T19:58:55.249444" level="INFO">${ts} = 1761260335249</msg>
+<var>${ts}</var>
+<arg>str(int(time.time()*1000))</arg>
+<arg>modules=time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-10-23T19:58:55.249193" elapsed="0.000276"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-10-23T19:58:55.249755" level="INFO">${email} = wrongpw_user_1761260335249@example.com</msg>
+<var>${email}</var>
+<arg>wrongpw_user_${ts}@example.com</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-10-23T19:58:55.249610" elapsed="0.000167"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-10-23T19:58:55.250012" level="INFO">${password} = Senha@123</msg>
+<var>${password}</var>
+<arg>Senha@123</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-10-23T19:58:55.249907" elapsed="0.000125"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-23T19:58:55.250377" level="INFO">${payload_reg} = {'name': 'WrongPW User', 'email': 'wrongpw_user_1761260335249@example.com', 'password': 'Senha@123'}</msg>
+<var>${payload_reg}</var>
+<arg>name=WrongPW User</arg>
+<arg>email=${email}</arg>
+<arg>password=${password}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-23T19:58:55.250160" elapsed="0.000240"/>
+</kw>
+<kw name="Post Request" owner="RequestsLibrary">
+<msg time="2025-10-23T19:58:55.250552" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:59.334751" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA8B0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:03.626871" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABABE0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:08.124234" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABB130&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:12.231230" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA580&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</msg>
+<var>${resp_reg}</var>
+<arg>api</arg>
+<arg>/auth/register</arg>
+<arg>json=${payload_reg}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<status status="FAIL" start="2025-10-23T19:58:55.250532" elapsed="16.995450">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA580&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${resp_reg.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.246850" elapsed="0.000091"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${payload_login}</var>
+<arg>email=${email}</arg>
+<arg>password=senha_errada</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.247716" elapsed="0.000084"/>
+</kw>
+<kw name="Post Request" owner="RequestsLibrary">
+<msg time="2025-10-23T19:59:12.248409" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${payload_login}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.248340" elapsed="0.000898"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.249767" elapsed="0.000060"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${body}</var>
+<arg>response.json()</arg>
+<arg>response=${response}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.250339" elapsed="0.000059"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${body}</arg>
+<arg>message</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.250925" elapsed="0.000058"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${body['message']}</arg>
+<arg>Invalid</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2025-10-23T19:59:12.251497" elapsed="0.000060"/>
+</kw>
+<doc>CT-AUTH-002.3 - Tentar login com senha incorreta</doc>
+<status status="FAIL" start="2025-10-23T19:58:55.248813" elapsed="17.003226">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA580&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))</status>
+</test>
+<kw name="Delete All Sessions" owner="RequestsLibrary" type="TEARDOWN">
+<msg time="2025-10-23T19:59:12.253294" level="INFO">Deleting All Sessions</msg>
+<doc>Removes all the session objects</doc>
+<status status="PASS" start="2025-10-23T19:59:12.253215" elapsed="0.000148"/>
+</kw>
+<status status="FAIL" start="2025-10-23T19:58:20.923507" elapsed="51.329886"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="3" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="01 Auth Api" id="s1" pass="0" fail="3" skip="0">01 Auth Api</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-10-23T19:58:21.169335" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:25.275224" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AD8590&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:29.536381" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AE8A50&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:34.031473" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AE8CD0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:38.259610" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:42.348300" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A82B10&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:46.642490" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141A5E7B0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:51.139919" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141AB9D00&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:58:55.247037" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:55.250552" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg time="2025-10-23T19:58:59.334751" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABA8B0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:03.626871" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABABE0&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:08.124234" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x0000029141ABB130&gt;: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente')': /api/v1/auth/register</msg>
+<msg time="2025-10-23T19:59:12.248409" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+</errors>
+</robot>
