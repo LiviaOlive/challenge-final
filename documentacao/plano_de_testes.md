@@ -59,7 +59,7 @@ Serão utilizadas *fixtures* ou criação de dados dinâmicos (via API) para gar
 ## 4. Ferramentas e Ambiente
 * **Gerenciamento de Projeto e Defeitos:** Github (Issues, Projects, Wiki).
 * **Controle de Versão:** Git / Github.
-* **Automação de API** Postman (para testes manuais) e RobotFramework (para automação).
+* **Automação de API:** Postman (para testes manuais) e RobotFramework (para automação).
 * **Navegadores:** Chrome (principal), Opera.
 
 ## 5. Entregáveis de Teste
