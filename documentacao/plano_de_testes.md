@@ -97,73 +97,95 @@ Esta seção detalha os cenários de teste derivados de cada História de Usuár
 | CT-AUTH-001.5 | Tentar registrar com senha fraca | O usuário está na página de registro. | 1. Preencher "nome" e "email".<br>2. Preencher o campo "senha" com um valor que não atende aos critérios (ex: "123").<br>3. Clicar no botão "Registrar". | Uma mensagem de erro (ex: "A senha deve ter...") é exibida. | senha: "12345" |
 
 #### US-AUTH-002: Login de Usuário
-* **CT-AUTH-002.1 (Positivo):** Realizar login com credenciais válidas. (Validar redirecionamento para Home e presença de token JWT no localStorage/sessionStorage).
-* **CT-AUTH-002.2 (Negativo):** Tentar login com e-mail não cadastrado. (Validar mensagem de erro).
-* **CT-AUTH-002.3 (Negativo):** Tentar login com senha incorreta. (Validar mensagem de erro).
-* **CT-AUTH-002.4 (Negativo):** Tentar login com campos em branco. (Validar erro).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-AUTH-002.1 | Realizar login com credenciais válidas | Existe um usuário cadastrado com as credenciais de teste. | 1. Navegar para a página de Login.<br>2. Preencher o campo "email" com "usuario@teste.com".<br>3. Preencher o campo "senha" com "Senha@123".<br>4. Clicar no botão "Entrar". | O usuário é autenticado, redirecionado para a Home e um token JWT é armazenado no localStorage/sessionStorage. | email: "usuario@teste.com"<br>senha: "Senha@123" |
+| CT-AUTH-002.2 | Tentar login com e-mail não cadastrado | O e-mail "naoexiste@teste.com" não está no banco. | 1. Preencher "email" com "naoexiste@teste.com".<br>2. Preencher "senha" com qualquer valor.<br>3. Clicar no botão "Entrar". | Mensagem de erro "Usuário ou senha inválidos" é exibida. | email: "naoexiste@teste.com" |
+| CT-AUTH-002.3 | Tentar login com senha incorreta | Usuário "usuario@teste.com" existe, mas a senha não é "senha_errada". | 1. Preencher "email" com "usuario@teste.com".<br>2. Preencher "senha" com "senha_errada".<br>3. Clicar no botão "Entrar". | Mensagem de erro "Usuário ou senha inválidos" é exibida. | email: "usuario@teste.com"<br>senha: "senha_errada" |
+| CT-AUTH-002.4 | Tentar login com campos em branco | O usuário está na página de Login. | 1. Deixar o campo "email" e/ou "senha" em branco.<br>2. Clicar no botão "Entrar". | Mensagens de validação "Campo obrigatório" são exibidas. | (Nenhum dado específico, apenas campos vazios) |
 
 #### US-AUTH-003: Logout de Usuário
-* **CT-AUTH-003.1 (Positivo):** Realizar logout pelo menu de navegação. (Validar remoção do token e redirecionamento).
-* **CT-AUTH-003.2 (Positivo):** Tentar acessar uma rota protegida (ex: `/perfil` ou `/minhas-reservas`) após o logout. (Validar redirecionamento para login).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-AUTH-003.1 | Realizar logout com sucesso | Um usuário está logado na aplicação. | 1. Clicar no menu de usuário (ex: no nome ou ícone de perfil).<br>2. Clicar no botão/link "Logout" (ou "Sair"). | O token JWT é removido do localStorage/sessionStorage. O usuário é redirecionado para a página de Login ou Home (como visitante). | N/A (Usuário logado) |
+| CT-AUTH-003.2 | Tentar acessar rota protegida após logout | Um usuário acabou de fazer logout. | 1. Tentar acessar diretamente uma URL protegida (ex: /perfil ou /minhas-reservas). | O usuário é redirecionado para a página de Login. O acesso à página protegida é bloqueado. | URL: /perfil |
 
 #### US-AUTH-004: Visualizar e Gerenciar Perfil do Usuário
-* **CT-AUTH-004.1 (Positivo):** Acessar a página de perfil e validar se nome, e-mail e função estão corretos.
-* **CT-AUTH-004.2 (Positivo):** Editar o campo "nome" e salvar. (Validar mensagem de sucesso e persistência da alteração após recarregar a página).
-* **CT-AUTH-004.3 (Positivo):** Validar que a página de perfil é separada da página de reservas.
-* **CT-AUTH-004.4 (Negativo):** Tentar salvar o nome com valor em branco. (Validar erro).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-AUTH-004.1 | Validar dados do perfil | Usuário logado com nome: "Usuário Teste", email: "usuario@teste.com", função: "cliente". | 1. Acessar a página "Perfil" (ou "Minha Conta"). | Os campos "nome", "email" e "função" são exibidos corretamente com os dados do usuário. | N/A (Usuário logado) |
+| CT-AUTH-004.2 | Editar e salvar o nome | Usuário logado está na página de Perfil. | 1. Clicar em "Editar" (se houver).<br>2. Alterar o campo "nome" para "Usuário Teste Editado".<br>3. Clicar em "Salvar".<br>4. Recarregar a página (F5). | Mensagem "Perfil atualizado com sucesso" é exibida. Após recarregar, o novo nome ("Usuário Teste Editado") permanece. | nome: "Usuário Teste Editado" |
+| CT-AUTH-004.3 | Validar separação das páginas de perfil e reservas | Usuário logado. | 1. Acessar a página de Perfil.<br>2. Acessar a página "Minhas Reservas". | As páginas são distintas e mostram informações diferentes (Perfil = dados do usuário; Reservas = lista de reservas). | N/A |
+| CT-AUTH-004.4 | Tentar salvar perfil com nome em branco | Usuário logado está na página de Perfil. | 1. Editar o perfil.<br>2. Apagar todo o conteúdo do campo "nome".<br>3. Clicar em "Salvar". | Mensagem de erro "Nome não pode ficar em branco" é exibida. A alteração não é salva. | nome: "" (vazio) |
 
 ### Módulo: Navegação e Home
 #### US-HOME-001: Página Inicial Atrativa
-* **CT-HOME-001.1 (Visual):** Validar exibição do banner principal.
-* **CT-HOME-001.2 (Funcional):** Validar que a seção "Filmes em Cartaz" exibe pôsteres.
-* **CT-HOME-001.3 (Navegação):** Validar que os links rápidos (se houver) e o menu principal funcionam.
-* **CT-HOME-001.4 (Responsividade):** Validar o layout da Home em viewports de mobile, tablet e desktop.
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-HOME-001.1 | Validar banner principal | N/A | 1. Acessar a página Home (/). | O banner principal (herói) é exibido e ocupa o espaço designado. | N/A (Teste Visual) |
+| CT-HOME-001.2 | Validar seção "Filmes em Cartaz" | Existem filmes cadastrados no banco de dados. | 1. Acessar a página Home (/).<br>2. Rolar a página até a seção "Filmes em Cartaz". | A seção exibe uma lista (ou carrossel) de pôsteres dos filmes. | N/A (Teste Funcional/Visual) |
+| CT-HOME-001.3 | Validar links rápidos e menu | N/A | 1. Acessar a página Home (/).<br>2. Clicar nos itens do menu principal (ex: "Filmes", "Login"). | O usuário é redirecionado corretamente para as páginas correspondentes. | N/A |
+| CT-HOME-001.4 | Validar responsividade da Home | N/A | 1. Acessar a página Home.<br>2. Redimensionar o navegador para viewports de Mobile e Tablet. | O layout se adapta corretamente: o banner é redimensionado, o grid de filmes se ajusta (ex: 1 coluna no mobile), o menu vira "hambúrguer". | Viewports: 390px, 768px |
 
 #### US-NAV-001: Navegação Intuitiva
-* **CT-NAV-001.1 (Positivo):** Validar que o cabeçalho está presente em todas as páginas (Home, Detalhes, Perfil, etc.).
-* **CT-NAV-001.2 (Positivo):** Validar menu para usuário logado (links "Minhas Reservas", "Perfil", "Logout").
-* **CT-NAV-001.3 (Positivo):** Validar menu para visitante (links "Login", "Registro").
-* **CT-NAV-001.4 (Responsividade):** Validar que o menu se transforma em "hambúrguer" em telas móveis e que é funcional.
-* **CT-NAV-001.5 (Visual):** Validar feedback visual da página atual no menu.
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-NAV-001.1 | Validar persistência do cabeçalho | N/A | 1. Acessar a Home.<br>2. Navegar para a página de Detalhes de um filme.<br>3. Navegar para a página de Login. | O cabeçalho (com o logo e o menu de navegação) está presente e consistente em todas as páginas. | N/A |
+| CT-NAV-001.2 | Validar menu (usuário logado) | Um usuário está logado. | 1. Acessar qualquer página. | O menu de navegação exibe os links "Minhas Reservas", "Perfil" e "Logout" (ou equivalentes). | N/A (Usuário logado) |
+| CT-NAV-001.3 | Validar menu (visitante) | O usuário não está logado (visitante). | 1. Acessar qualquer página. | O menu de navegação exibe os links "Login" e "Registro". | N/A (Visitante) |
+| CT-NAV-001.4 | Validar menu "hambúrguer" (responsivo) | N/A | 1. Acessar o site em um viewport móvel.<br>2. Clicar no ícone de menu "hambúrguer". | O menu completo é exibido (ex: como um drawer lateral) e seus links são funcionais. | Viewport: 390px |
+| CT-NAV-001.5 | Validar feedback visual da página ativa | N/A | 1. Acessar a página "Filmes". | O link "Filmes" no menu principal deve ter um destaque visual (ex: sublinhado, cor diferente) indicando que é a página ativa. | N/A (Teste Visual) |
 
 ### Módulo: Filmes e Sessões
 #### US-MOVIE-001: Navegar na Lista de Filmes
-* **CT-MOVIE-001.1 (Visual):** Validar que os filmes são exibidos em grid com pôsteres de qualidade.
-* **CT-MOVIE-001.2 (Visual):** Validar que os cards contêm: título, classificação, gêneros, duração e data de lançamento.
-* **CT-MOVIE-001.3 (Funcional):** Clicar em um card de filme. (Validar redirecionamento para a página de detalhes do filme correto).
-* **CT-MOVIE-001.4 (Responsividade):** Validar o layout do grid em diferentes viewports.
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-MOVIE-001.1 | Validar exibição do grid de filmes | Filmes cadastrados no banco. | 1. Acessar a página de listagem de filmes. | Os filmes são exibidos em formato de grid. Pôsteres têm boa qualidade. | N/A (Teste Visual) |
+| CT-MOVIE-001.2 | Validar informações do card do filme | Filmes cadastrados com metadados completos. | 1. Acessar a página de listagem de filmes.<br>2. Inspecionar um card de filme. | O card exibe: Título, Classificação (ex: 14), Gêneros, Duração e Data de Lançamento. | N/A (Teste Visual) |
+| CT-MOVIE-001.3 | Clicar em um card de filme | Um filme com ID "123" existe. | 1. Acessar a página de listagem de filmes.<br>2. Clicar no pôster/título do filme (ID "123"). | O usuário é redirecionado para a página de detalhes desse filme (ex: /filme/123). | ID do Filme: 123 |
+| CT-MOVIE-001.4 | Validar responsividade do grid | Filmes cadastrados. | 1. Acessar a página de listagem.<br>2. Redimensionar o navegador para viewports de Mobile e Tablet. | O grid se ajusta (ex: 4 colunas no Desktop, 2 no Tablet, 1 ou 2 no Mobile) sem quebrar o layout. | Viewports: 390px, 768px |
 
 #### US-MOVIE-002: Visualizar Detalhes do Filme
-* **CT-MOVIE-002.1 (Visual):** Validar exibição de todas as informações: sinopse, elenco, diretor, pôster, etc.
-* **CT-MOVIE-002.2 (Funcional):** Validar que a seção de horários (US-SESSION-001) é exibida.
-* **CT-MOVIE-002.3 (Funcional):** Clicar em um horário disponível. (Validar redirecionamento para a seleção de assentos).
-* **CT-MOVIE-002.4 (Negativo):** Tentar acessar detalhes de um filme com ID inválido (ex: `/filme/9999`). (Validar tratamento de erro - ex: "Filme não encontrado" ou redirect para Home).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-MOVIE-002.1 | Validar informações da página de detalhes | Um filme (ID "123") existe com dados completos. | 1. Acessar a página de detalhes do filme (ex: /filme/123). | Todas as informações são exibidas: Sinopse, Elenco, Diretor, Pôster, Gênero, Duração, etc. | ID do Filme: 123 |
+| CT-MOVIE-002.2 | Validar exibição da seção de horários | O filme (ID "123") possui sessões cadastradas. | 1. Acessar a página de detalhes do filme (ex: /filme/123).<br>2. Rolar a página até a seção de horários/sessões. | A seção de horários é exibida, mostrando as sessões disponíveis. | ID do Filme: 123 |
+| CT-MOVIE-002.3 | Clicar em um horário disponível (E2E) | Usuário está logado. Filme (ID "123") tem sessão (ID "abc"). | 1. Acessar a página de detalhes do filme (ID "123").<br>2. Clicar em um horário/sessão disponível (ID "abc"). | O usuário é redirecionado para a página de Seleção de Assentos para aquela sessão. | ID da Sessão: "abc" |
+| CT-MOVIE-002.4 | Tentar acessar detalhes de filme inexistente | O filme com ID "9999" não existe no banco. | 1. Acessar a URL /filme/9999 diretamente. | O usuário vê uma página "Filme não encontrado" (404) ou é redirecionado para a Home / Lista de Filmes. | ID do Filme: 9999 |
 
 #### US-SESSION-001: Visualizar Horários de Sessões
-* **CT-SESSION-001.1 (Visual):** Validar que os horários exibem data, hora, teatro (sala) e disponibilidade.
-* **CT-SESSION-001.2 (Funcional):** Clicar em um horário. (Validar que o usuário logado é levado para a seleção de assentos).
-* **CT-SESSION-001.3 (Negativo):** Clicar em um horário sendo visitante. (O sistema deve solicitar login antes de prosseguir).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-SESSION-001.1 | Validar informações do card de sessão | Filme com sessões cadastradas. | 1. Acessar a página de detalhes de um filme.<br>2. Inspecionar um card de sessão. | O card exibe: Data, Hora, Teatro (Sala, ex: "Sala 3D") e tipo de áudio/legenda (ex: "Dublado"). | N/A (Teste Visual) |
+| CT-SESSION-001.2 | Clicar em um horário (usuário logado) | Um usuário está logado. | 1. Acessar a página de detalhes de um filme.<br>2. Clicar em um horário de sessão disponível. | O usuário é levado para a página de Seleção de Assentos. | N/A (Usuário logado) |
+| CT-SESSION-001.3 | Clicar em um horário (visitante) | O usuário não está logado (visitante). | 1. Acessar a página de detalhes de um filme.<br>2. Clicar em um horário de sessão disponível. | O sistema solicita o Login (seja por um modal ou redirecionando para /login). O acesso à seleção de assentos é bloqueado. | N/A (Visitante) |
 
 ### Módulo: Reservas (Fluxo E2E)
 #### US-RESERVE-001: Selecionar Assentos para Reserva
-* **CT-RESERVE-001.1 (Positivo):** Selecionar um assento disponível. (Validar que o assento muda de cor e o subtotal é atualizado).
-* **CT-RESERVE-001.2 (Positivo):** Selecionar múltiplos assentos disponíveis. (Validar atualização do subtotal).
-* **CT-RESERVE-001.3 (Positivo):** Desmarcar um assento selecionado. (Validar que o assento volta ao estado original e subtotal é atualizado).
-* **CT-RESERVE-001.4 (Negativo):** Tentar selecionar um assento já reservado (ocupado). (Validar que não é clicável ou exibe aviso).
-* **CT-RESERVE-001.5 (Negativo):** Tentar prosseguir para o checkout sem selecionar nenhum assento. (Validar que o botão "Continuar" está desabilitado ou exibe erro).
-* **CT-RESERVE-001.6 (Visual):** Validar a legenda de cores dos assentos (disponível, ocupado, selecionado).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-RESERVE-001.1 | Selecionar um assento disponível | Usuário logado na página de seleção de assentos. Assento "A1" está disponível. | 1. Clicar no assento "A1". | O assento "A1" muda de cor (para "selecionado"). O subtotal é atualizado para o valor de 1 ingresso. | Assento: "A1" |
+| CT-RESERVE-001.2 | Selecionar múltiplos assentos | Assentos "A1" e "A2" estão disponíveis. | 1. Clicar no assento "A1".<br>2. Clicar no assento "A2". | Os assentos "A1" e "A2" mudam de cor. O subtotal é atualizado para o valor de 2 ingressos. | Assentos: "A1", "A2" |
+| CT-RESERVE-001.3 | Desmarcar um assento selecionado | Assento "A1" foi selecionado pelo usuário. | 1. Clicar novamente no assento "A1" (que está "selecionado"). | O assento "A1" volta à cor de "disponível". O subtotal é atualizado (diminuído). | Assento: "A1" |
+| CT-RESERVE-001.4 | Tentar selecionar assento ocupado | Assento "B5" está ocupado (já reservado por outro usuário). | 1. Clicar no assento "B5" (que está na cor "ocupado"). | O assento não é selecionado. Nenhuma mudança ocorre no subtotal. (Opcional: um aviso "Assento ocupado" é exibido). | Assento: "B5" (Ocupado) |
+| CT-RESERVE-001.5 | Tentar prosseguir sem selecionar assentos | Usuário está na página de seleção de assentos. | 1. Clicar no botão "Continuar" (ou "Checkout") sem ter selecionado nenhum assento. | O botão está desabilitado OU uma mensagem de erro "Selecione ao menos um assento" é exibida. A navegação é bloqueada. | N/A |
+| CT-RESERVE-001.6 | Validar legenda de assentos | Usuário está na página de seleção de assentos. | 1. Inspecionar a legenda de cores. | A legenda exibe claramente o significado de cada cor (ex: Azul=Disponível, Cinza=Ocupado, Verde=Selecionado). | N/A (Teste Visual) |
 
 #### US-RESERVE-002: Processo de Checkout
-* **CT-RESERVE-002.1 (Positivo):** Validar que o resumo (filme, assentos, total) está correto na página de checkout.
-* **CT-RESERVE-002.2 (Positivo):** Selecionar um método de pagamento (ex: PIX).
-* **CT-RESERVE-002.3 (Positivo):** Finalizar o pagamento (simulado). (Validar mensagem de sucesso e redirecionamento).
-* **CT-RESERVE-002.4 (Positivo - Verificação):** Após a reserva, verificar a tela de seleção de assentos novamente para o mesmo horário. (Validar que os assentos selecionados agora aparecem como ocupados).
-* **CT-RESERVE-002.5 (Negativo):** Tentar acessar a página de checkout diretamente (via URL) sem ter selecionado assentos. (Validar redirecionamento ou erro).
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-RESERVE-002.1 | Validar resumo do pedido no checkout | Usuário selecionou o assento "A1" para o filme "Filme Teste" e prosseguiu para o checkout. | 1. Acessar a página de Checkout. | O resumo do pedido exibe corretamente: "Filme Teste", Assento "A1", e o valor total correto. | N/A |
+| CT-RESERVE-002.2 | Selecionar método de pagamento | Usuário está na página de Checkout. | 1. Clicar na opção de pagamento "PIX". | A opção "PIX" é selecionada e (se aplicável) as instruções de PIX (QR Code) são exibidas. | Método: PIX |
+| CT-RESERVE-002.3 | Finalizar pagamento (simulado) | Usuário está no checkout com assentos e método de pagamento selecionados. | 1. Clicar no botão "Finalizar Pagamento" (ou "Confirmar Reserva"). | O pagamento é processado (simulado). O usuário vê uma mensagem de "Reserva confirmada com sucesso" e é redirecionado para "Minhas Reservas" ou uma página de sucesso. | N/A |
+| CT-RESERVE-002.4 | Verificar assento ocupado pós-reserva | Usuário acabou de reservar o assento "A1" para a sessão "abc". | 1. Voltar para a página de detalhes do filme.<br>2. Selecionar a mesma sessão "abc". | Na tela de seleção de assentos, o assento "A1" agora aparece com a cor "Ocupado". | Assento: "A1" |
+| CT-RESERVE-002.5 | Tentar acessar checkout diretamente (URL) | Usuário logado, mas não iniciou um fluxo de reserva. | 1. Digitar a URL /checkout diretamente no navegador. | O usuário é redirecionado para a Home (ou para o início do fluxo de reserva) ou vê uma mensagem "Seu carrinho está vazio". | URL: /checkout |
 
 #### US-RESERVE-003: Visualizar Minhas Reservas
-* **CT-RESERVE-003.1 (Positivo):** Acessar a página "Minhas Reservas" após realizar uma compra.
-* **CT-RESERVE-003.2 (Visual):** Validar que a reserva é exibida em formato de card com todas as informações: pôster, filme, data, horário, assentos, status (confirmada) e método de pagamento.
-* **CT-RESERVE-003.3 (Positivo):** Acessar "Minhas Reservas" com um usuário novo (sem reservas). (Validar exibição de mensagem amigável, ex: "Você ainda não possui reservas").
+| ID | Descrição do Cenário | Pré-condições | Passos | Resultado Esperado | Dados de Teste |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CT-RESERVE-003.1 | Acessar "Minhas Reservas" após compra | Usuário logado que acabou de fazer uma reserva. | 1. Navegar para a página "Minhas Reservas" (pelo menu de usuário). | A nova reserva é listada na página. | N/A (Usuário logado) |
+| CT-RESERVE-003.2 | Validar informações do card de reserva | Usuário possui uma reserva confirmada para "Filme Teste", assento "A1", às 18:00, via PIX. | 1. Acessar "Minhas Reservas".<br>2. Inspecionar o card da reserva. | O card exibe: Pôster, "Filme Teste", Data, Horário (18:00), Assentos ("A1"), Status ("Confirmada"), Método de Pagamento ("PIX"). | N/A (Teste Visual) |
+| CT-RESERVE-003.3 | Validar página de reservas vazia | Um usuário novo (sem reservas) está logado. | 1. Acessar a página "Minhas Reservas". | Uma mensagem amigável é exibida (ex: "Você ainda não possui reservas"). A página não está quebrada. | N/A (Usuário novo) |
 
 ## 8. Priorização da Automação
 Para otimizar o esforço e garantir a cobertura dos fluxos de maior valor e risco, a automação seguirá a seguinte prioridade:
