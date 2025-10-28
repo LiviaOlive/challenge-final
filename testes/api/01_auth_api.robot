@@ -19,7 +19,6 @@ Registrar User Com Sucesso
     ${email}=    Set Variable    user_${ts}@example.com
     ${payload}=    Create Dictionary    name=Robot Test User    email=${email}    password=Senha@123
     
-    # CORREÇÃO: Trocado 'Post Request' por 'POST On Session' para usar a sessão
     ${response}=    POST On Session    api    /auth/register    json=${payload}
     
     Should Be Equal As Integers    ${response.status_code}    201
@@ -35,14 +34,12 @@ Login Com Credenciais Validas
     ${password}=    Set Variable    Senha@123
     ${payload_reg}=    Create Dictionary    name=Login User    email=${email}    password=${password}
     
-    # CORREÇÃO: Trocado 'Post Request' por 'POST On Session'
     ${resp_reg}=    POST On Session    api    /auth/register    json=${payload_reg}
     
     Should Be Equal As Integers    ${resp_reg.status_code}    201
     
     ${payload_login}=    Create Dictionary    email=${email}    password=${password}
-    
-    # CORREÇÃO: Trocado 'Post Request' por 'POST On Session'
+
     ${response}=    POST On Session    api    /auth/login    json=${payload_login}
     
     Should Be Equal As Integers    ${response.status_code}    200
@@ -63,12 +60,8 @@ Login Com Senha Incorreta
     
     ${payload_login}=    Create Dictionary    email=${email}    password=senha_errada
     
-    # --- CORREÇÃO APLICADA AQUI ---
-    # Ao adicionar 'expected_status=401', você avisa a biblioteca
-    # que um erro 401 é esperado e que ela não deve falhar o teste.
     ${response}=    POST On Session    api    /auth/login    json=${payload_login}    expected_status=401
     
-    # Agora o teste pode continuar e validar a resposta
     Should Be Equal As Integers    ${response.status_code}    401
     ${resp_text}=    Convert To String    ${response.content}
     Log    ${resp_text}
