@@ -27,3 +27,9 @@ Aqui está o fluxo de sessões.
 Aqui está o fluxo de setup.
 
 ![Mapa Mental do Fluxo de Filmes](./imagens/Setup.png)
+
+## Cinemas
+
+Aqui está o fluxo de cinemas.
+
+![Mapa Mental do Fluxo de Filmes](./imagens/Theaters.png)
