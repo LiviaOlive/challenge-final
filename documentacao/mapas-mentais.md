@@ -33,3 +33,9 @@ Aqui está o fluxo de setup.
 Aqui está o fluxo de cinemas.
 
 ![Mapa Mental do Fluxo de Filmes](./imagens/Theaters.png)
+
+## Usuários
+
+Aqui está o fluxo de usuários.
+
+![Mapa Mental do Fluxo de Filmes](./imagens/Users.png)
