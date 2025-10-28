@@ -39,3 +39,9 @@ Aqui está o fluxo de cinemas.
 Aqui está o fluxo de usuários.
 
 ![Mapa Mental do Fluxo de Filmes](./imagens/Users.png)
+
+## API Info
+
+Aqui está o fluxo de API Info.
+
+![Mapa Mental do Fluxo de Filmes](./imagens/ApiInfo.png)
