@@ -6,6 +6,12 @@ Aqui está o fluxo de autenticação do usuário.
 
 ## Filmes
 
-Este é o mapa mental do fluxo de filmes.
+Aqui está o fluxo de filmes.
 
 ![Mapa Mental do Fluxo de Filmes](./imagens/Movies.png)
+
+## Reservas
+
+Aqui está o fluxo de reservas.
+
+![Mapa Mental do Fluxo de Filmes](./imagens/Reservations.png)
