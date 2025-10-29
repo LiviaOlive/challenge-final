@@ -31,12 +31,8 @@ Validate First Session
 Login As Admin
     [Documentation]    Faz login como administrador e retorna o token
     ${headers}=    Create Dictionary    Content-Type=application/json
-    
-    # Esta keyword agora usa as variáveis deste arquivo
     ${response}=    POST On Session    cinema    ${AUTH_ENDPOINT}/login    json=${ADMIN_USER}    headers=${headers}
-    
     Status Should Be    200    ${response}
-    ${token}=    Set Variable    ${response.json()}[token]
-    
-    # --- SINTAXE CORRIGIDA ---
+    Log To Console    Resposta do Login: ${response.json()}
+    ${token}=    Set Variable    ${response.json()}[data][token]
     RETURN    ${token}
