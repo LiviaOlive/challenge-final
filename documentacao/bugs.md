@@ -2,7 +2,7 @@
 
 ## Introdução
 
-Este documento apresenta um resumo dos principais bugs identificados durante os testes do sistema Cinema App. Para informações mais detalhadas sobre cada bug, incluindo evidências e logs, consulte as **Issues no GitHub** do projeto.
+Este documento apresenta um resumo dos principais bugs identificados durante os testes do sistema Cinema App. Para informações mais detalhadas sobre cada bug, incluindo evidências e logs, consulte as **Issues no GitHub** do projeto. 
 
 ---
 
