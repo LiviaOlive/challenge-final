@@ -1,13 +1,8 @@
 *** Settings ***
 Library           SeleniumLibrary
 Library           BuiltIn
-
+Resource          ../resources/variables.robot
 Suite Teardown    Close All Browsers
-
-*** Variables ***
-${BASE_URL}       http://localhost:3002
-${BROWSER}        chrome
-${PASSWORD}       Password123!
 
 *** Test Cases ***
 Register User UI Successfully
