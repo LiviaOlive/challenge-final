@@ -1,6 +1,6 @@
 # Testes Cinema App - Desafio Final Compass
 
-Este diretório contém os testes (UI e API) para o projeto `cinema-challenge`.
+Este diretório contém os testes (UI e API) para o projeto `cinema-challenge`. 
 
 ## Estrutura de Pastas
 
