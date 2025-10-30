@@ -12,3 +12,6 @@ ${API_PATH}       /api/v1
 ...              time=14:30    
 ...              theater=Sala 1    
 ...              price=25.00
+${BASE_URL}       http://localhost:3002
+${BROWSER}        chrome
+${PASSWORD}       Password123!
