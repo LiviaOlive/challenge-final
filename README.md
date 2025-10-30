@@ -112,9 +112,11 @@ Os resultados dos testes são salvos na pasta `results/` com:
 
 O projeto inclui documentação completa na pasta `documentacao/`:
 
-- **`bugs.md`** - Relatório detalhado dos bugs encontrados durante os testes
-- **Casos de Teste** - Documentação dos cenários testados
-- **Evidências** - Screenshots e logs dos problemas identificados
+- **bugs.md** - Relatório detalhado dos bugs encontrados durante os testes
+- **historias_de_usuarios.md** - Documentação dos cenários e histórias de usuário testados
+- **mapas-mentais.md** - Mapas mentais e diagramas do processo de testes
+- **planos_de_testes.md** - Estratégia e planejamento dos testes executados
+- **imagens/** - Imagens de mapas mentais para documentá-los em mapas-mentais.md
 
 ## 🐛 Bugs Identificados
 
