@@ -3,12 +3,12 @@ Documentation     Test suite for Movies API endpoints
 ...               Covers US-MOVIE-001 and US-MOVIE-002 scenarios
 
 Resource          ../resources/variables.robot
-Resource          ../resources/api_keywords.robot
+Resource          ../resources/keywords.robot
 Library           RequestsLibrary
 Library           Collections
 Library           OperatingSystem
 
-Suite Setup       api_keywords.Create API Session
+Suite Setup       keywords.Create API Session
 
 
 *** Test Cases ***
