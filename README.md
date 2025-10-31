@@ -45,11 +45,7 @@ desafio final estagio/
 │   ├── cinema-challenge-back-main/
 │   └── cinema-challenge-front-main/
 │
-├── results/
-│   ├── report.html
-│   ├── log.html
-│   └── output.xml
-│
+
 ├── .gitignore
 ├── Cinema App API.postman_collection.json
 ├── README.md
