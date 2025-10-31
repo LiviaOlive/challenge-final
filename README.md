@@ -1,6 +1,10 @@
 # 🎬 Testes Cinema App - Desafio Final Compass
 
-Este diretório contém os testes (UI e API) para o projeto `cinema-challenge`. 
+Este diretório contém os testes (UI e API) para o projeto `cinema-challenge`.
+
+## 👋 Apresentação Pessoal
+
+Olá! Eu sou **Ana Lívia**, tenho 20 anos e estou cursando o quinto semestre de Matemática Computacional. Este projeto foi desenvolvido como parte do desafio final do estágio na Compass UOL, onde apliquei conhecimentos de automação de testes usando Robot Framework para validar funcionalidades de UI e API. 
 
 ## 📁 Estrutura de Pastas
 
@@ -37,10 +41,21 @@ testes/
 
 ## ⚙️ Pré-requisitos
 
-- Python 3.8+
+### Software Necessário
+- Python 3.8 ou superior
+- pip (gerenciador de pacotes Python)
+- Git (para clonar o repositório)
+- Navegador web (Chrome ou Firefox)
+
+### Dependências Python
 - Robot Framework
-- Chrome/Firefox instalado
-- Cinema App rodando (frontend e backend)
+- SeleniumLibrary
+- RequestsLibrary
+
+### Aplicação Cinema App
+- Frontend rodando em `http://localhost:3002`
+- Backend/API rodando em `http://localhost:3000`
+- Banco de dados configurado e acessível
 
 ## 📦 Instalação
 
@@ -133,3 +148,7 @@ Durante a execução dos testes, foram identificados diversos bugs críticos e d
 - Problemas visuais nos campos de login
 
 **Para detalhes completos dos bugs, consulte o arquivo `documentacao/bugs.md` e as Issues no GitHub do projeto.**
+
+## 🙏 Agradecimentos
+
+Agradecimento especial ao **Caio**, colega de squad, que me ajudou a entender o projeto e forneceu os passos necessários para inicializar a aplicação Cinema App.
