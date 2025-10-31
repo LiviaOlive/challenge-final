@@ -1,0 +1,891 @@
+{
+	"info": {
+		"_postman_id": "4ffd6766-6749-41f6-a015-306aa3f093e5",
+		"name": "Cinema App API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48151983",
+		"_collection_link": "https://nalivia24-5781648.postman.co/workspace/Cinema-App~6dfea3b3-95e8-4163-947a-f865580febb0/collection/48151983-4ffd6766-6749-41f6-a015-306aa3f093e5?action=share&source=collection_link&creator=48151983"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Cadastro em branco",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"\",\r\n  \"email\": \"{{newUserEmail}}\",\r\n  \"password\": \"{{newUserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Setup Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Pega a resposta da requisição EM FORMATO JSON (apenas uma vez)\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Pega o corpo da REQUISIÇÃO que você enviou (para comparar)\r",
+									"const requestBody = pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+									"\r",
+									"// --- SEÇÃO DE TESTES ---\r",
+									"\r",
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response success is true\", function () {\r",
+									"    pm.expect(response.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has a data object\", function () {\r",
+									"    pm.expect(response.data).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Data contains a non-empty token\", function () {\r",
+									"    pm.expect(response.data.token).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email in response matches request\", function () {\r",
+									"    pm.expect(response.data.email).to.eql(requestBody.email);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Name in response matches request\", function () {\r",
+									"    pm.expect(response.data.name).to.eql(requestBody.name);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User role is 'admin'\", function () {\r",
+									"    pm.expect(response.data.role).to.eql('admin');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User has an _id\", function () {\r",
+									"    pm.expect(response.data._id).to.exist;\r",
+									"});\r",
+									"\r",
+									"// --- SEÇÃO PARA SALVAR VARIÁVEIS ---\r",
+									"\r",
+									"// Salva o token e o email em variáveis de coleção\r",
+									"// para que outras requisições possam usá-los\r",
+									"if (response.data && response.data.token) {\r",
+									"    pm.collectionVariables.set(\"authToken\", response.data.token);\r",
+									"    pm.collectionVariables.set(\"adminEmail\", response.data.email);\r",
+									"    console.log(\"Token e Email salvos nas variáveis da Collection!\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Admin User\",\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registro usuário",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Gera um email único usando o timestamp atual\r",
+									"const timestamp = new Date().getTime();\r",
+									"const randomEmail = `user_${timestamp}@example.com`;\r",
+									"\r",
+									"// Salva o email em uma variável de coleção para que o Body e os Testes possam usá-lo\r",
+									"pm.collectionVariables.set(\"newUserName\", \"Test User\");\r",
+									"pm.collectionVariables.set(\"newUserEmail\", randomEmail);\r",
+									"pm.collectionVariables.set(\"newUserPassword\", \"Password123!\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Pega a resposta da API em formato JSON\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Pega o email que foi enviado na requisição (da variável)\r",
+									"const sentEmail = pm.collectionVariables.get(\"newUserEmail\");\r",
+									"const sentName = pm.collectionVariables.get(\"newUserName\");\r",
+									"\r",
+									"// Teste 1: Verificar se o Status Code é 201 (Created)\r",
+									"// (POST para criar algo geralmente retorna 201. Se o seu for 200, apenas mude o número)\r",
+									"pm.test(\"Status code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Teste 2: Verificar se a resposta principal tem \"success: true\"\r",
+									"pm.test(\"Response success is true\", function () {\r",
+									"    pm.expect(response.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Teste 3: Verificar se o objeto \"data\" existe\r",
+									"pm.test(\"Response has a data object\", function () {\r",
+									"    pm.expect(response.data).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"// Teste 4: Verificar se o token foi gerado e não está vazio\r",
+									"pm.test(\"Data contains a non-empty token\", function () {\r",
+									"    pm.expect(response.data.token).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"// Teste 5: Verificar se o email na resposta é o mesmo que foi enviado\r",
+									"pm.test(\"Email in response matches the sent email\", function () {\r",
+									"    pm.expect(response.data.email).to.eql(sentEmail);\r",
+									"});\r",
+									"\r",
+									"// Teste 6: Verificar se o nome na resposta é o mesmo que foi enviado\r",
+									"pm.test(\"Name in response matches the sent name\", function () {\r",
+									"    pm.expect(response.data.name).to.eql(sentName);\r",
+									"});\r",
+									"\r",
+									"// Teste 7: Verificar se a role (função) do novo usuário é \"user\"\r",
+									"pm.test(\"User role is 'user'\", function () {\r",
+									"    pm.expect(response.data.role).to.eql('user');\r",
+									"});\r",
+									"\r",
+									"// Teste 8: Verificar se o usuário tem um _id\r",
+									"pm.test(\"User has an _id\", function () {\r",
+									"    pm.expect(response.data._id).to.exist;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{newUserName}}\",\r\n  \"email\": \"{{newUserEmail}}\",\r\n  \"password\": \"{{newUserPassword}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login válido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"User\",\r\n  \"email\": \"duplicado_1761848616624@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastro email duplicado",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Gera um email único baseado no tempo\r",
+									"const timestamp = new Date().getTime();\r",
+									"const randomEmail = `duplicado_${timestamp}@example.com`;\r",
+									"\r",
+									"// Salva o email em uma variável\r",
+									"pm.collectionVariables.set(\"emailParaDuplicar\", randomEmail);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// --- Testes para a Requisição 1 (A que deu 201 Created) ---\r",
+									"pm.test(\"Requisição 1: Status code é 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Validar a resposta da primeira requisição\r",
+									"const response1 = pm.response.json();\r",
+									"pm.test(\"Requisição 1: Email registrado com sucesso\", function () {\r",
+									"    pm.expect(response1.data.email).to.eql(pm.collectionVariables.get(\"emailParaDuplicar\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// --- Teste para a Requisição 2 (O teste de duplicidade) ---\r",
+									"pm.test(\"Requisição 2: API rejeita email duplicado\", function (done) {\r",
+									"    \r",
+									"    // Pega o corpo da Requisição 1 para reenviar\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"    pm.sendRequest({\r",
+									"        url: pm.request.url.toString(), // Usa a mesma URL\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(requestBody) // Usa o MESMO body\r",
+									"        }\r",
+									"    }, function (err, response2) {\r",
+									"        \r",
+									"        // --- SCRIPT DE TESTE MAIS SEGURO ---\r",
+									"        \r",
+									"        // 1. Primeiro, verificar se houve um erro de rede/conexão\r",
+									"        // Se 'err' não for nulo, a requisição nem chegou na API.\r",
+									"        pm.test(\"Requisição 2: Não houve erro de conexão\", function () {\r",
+									"            pm.expect(err).to.be.null;\r",
+									"        });\r",
+									"\r",
+									"        // 2. Se a conexão foi OK, 'response2' deve existir\r",
+									"        pm.test(\"Requisição 2: Objeto de resposta foi recebido\", function () {\r",
+									"            pm.expect(response2).to.not.be.undefined;\r",
+									"        });\r",
+									"\r",
+									"        // 3. Agora sim, testar a resposta da API (o erro 400 ou 409)\r",
+									"        pm.test(\"Requisição 2: Status code é 400 (Bad Request)\", function () {\r",
+									"             // Esperamos 400 (Bad Request) ou 409 (Conflict). \r",
+									"             // Se sua API retornar 409, mude o número abaixo.\r",
+									"            pm.expect(response2).to.have.status(400);\r",
+									"        });\r",
+									"        \r",
+									"        // 4. Testar a mensagem de erro\r",
+									"        const response2Json = response2.json();\r",
+									"        pm.test(\"Requisição 2: Mensagem de erro está correta\", function () {\r",
+									"            pm.expect(response2Json.success).to.be.false;\r",
+									"            pm.expect(response2Json.message).to.contain(\"User already exists\"); \r",
+									"        });\r",
+									"        \r",
+									"        done(); // Informa ao Postman que o teste assíncrono terminou\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Usuario Duplicado\",\r\n  \"email\": \"{{emailParaDuplicar}}\",\r\n  \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastro senha fraca",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Gera um email único baseado no tempo\r",
+									"const timestamp = new Date().getTime();\r",
+									"const randomEmail = `duplicado_${timestamp}@example.com`;\r",
+									"\r",
+									"// Salva o email em uma variável\r",
+									"pm.collectionVariables.set(\"emailParaDuplicar\", randomEmail);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// --- Testes para a Requisição 1 (A que deu 201 Created) ---\r",
+									"pm.test(\"Requisição 1: Status code é 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Validar a resposta da primeira requisição\r",
+									"const response1 = pm.response.json();\r",
+									"pm.test(\"Requisição 1: Email registrado com sucesso\", function () {\r",
+									"    pm.expect(response1.data.email).to.eql(pm.collectionVariables.get(\"emailParaDuplicar\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// --- Teste para a Requisição 2 (O teste de duplicidade) ---\r",
+									"pm.test(\"Requisição 2: API rejeita email duplicado\", function (done) {\r",
+									"    \r",
+									"    // Pega o corpo da Requisição 1 para reenviar\r",
+									"    const requestBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"    pm.sendRequest({\r",
+									"        url: pm.request.url.toString(), // Usa a mesma URL\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(requestBody) // Usa o MESMO body\r",
+									"        }\r",
+									"    }, function (err, response2) {\r",
+									"        \r",
+									"        // --- SCRIPT DE TESTE MAIS SEGURO ---\r",
+									"        \r",
+									"        // 1. Primeiro, verificar se houve um erro de rede/conexão\r",
+									"        // Se 'err' não for nulo, a requisição nem chegou na API.\r",
+									"        pm.test(\"Requisição 2: Não houve erro de conexão\", function () {\r",
+									"            pm.expect(err).to.be.null;\r",
+									"        });\r",
+									"\r",
+									"        // 2. Se a conexão foi OK, 'response2' deve existir\r",
+									"        pm.test(\"Requisição 2: Objeto de resposta foi recebido\", function () {\r",
+									"            pm.expect(response2).to.not.be.undefined;\r",
+									"        });\r",
+									"\r",
+									"        // 3. Agora sim, testar a resposta da API (o erro 400 ou 409)\r",
+									"        pm.test(\"Requisição 2: Status code é 400 (Bad Request)\", function () {\r",
+									"             // Esperamos 400 (Bad Request) ou 409 (Conflict). \r",
+									"             // Se sua API retornar 409, mude o número abaixo.\r",
+									"            pm.expect(response2).to.have.status(400);\r",
+									"        });\r",
+									"        \r",
+									"        // 4. Testar a mensagem de erro\r",
+									"        const response2Json = response2.json();\r",
+									"        pm.test(\"Requisição 2: Mensagem de erro está correta\", function () {\r",
+									"            pm.expect(response2Json.success).to.be.false;\r",
+									"            pm.expect(response2Json.message).to.contain(\"User already exists\"); \r",
+									"        });\r",
+									"        \r",
+									"        done(); // Informa ao Postman que o teste assíncrono terminou\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Usuario Duplicado\",\r\n  \"email\": \"{{emailParaDuplicar}}\",\r\n  \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login email não cadastrado",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"User\",\r\n  \"email\": \"naocadastrado@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login campos em branco",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"naocadastrado@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get current user profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Pega a resposta da API em formato JSON\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Pega o email do admin que foi salvo na etapa de Login\r",
+									"const loggedInAdminEmail = pm.collectionVariables.get(\"adminEmail\");\r",
+									"\r",
+									"// --- INÍCIO DOS TESTES ---\r",
+									"\r",
+									"// Teste 1: Verificar se o Status Code é 200 (OK)\r",
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Teste 2: Verificar se a resposta principal tem \"success: true\"\r",
+									"pm.test(\"Response success is true\", function () {\r",
+									"    pm.expect(response.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Teste 3: Verificar se o objeto \"data\" existe\r",
+									"pm.test(\"Response has a data object\", function () {\r",
+									"    pm.expect(response.data).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"// Teste 4: Verificar se a 'role' (função) do usuário é \"admin\"\r",
+									"pm.test(\"User role is 'admin'\", function () {\r",
+									"    pm.expect(response.data.role).to.eql('admin');\r",
+									"});\r",
+									"\r",
+									"// Teste 5: Verificar se o email na resposta é o mesmo do admin que fez login\r",
+									"pm.test(\"Email in response matches logged-in admin\", function () {\r",
+									"    pm.expect(response.data.email).to.eql(loggedInAdminEmail);\r",
+									"});\r",
+									"\r",
+									"// Teste 6: Verificar se o usuário tem um _id\r",
+									"pm.test(\"User has an _id\", function () {\r",
+									"    pm.expect(response.data._id).to.exist;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Ver reservas do user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/reservations/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar reserva",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"session\": \"6903b79a50db82af55d3956f\",\r\n  \"seats\": [\r\n    {\r\n      \"row\": \"A\",\r\n      \"number\": 1,\r\n      \"type\": \"full\"\r\n    }\r\n  ],\r\n  \"paymentMethod\": \"credit_card\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Criar sessão",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"movie\": \"69025fc9b6e811e31ffd34bb\",\r\n  \"theater\": \"6903b78950db82af55d3956a\",\r\n  \"datetime\": \"2025-10-30T18:56:32.668Z\",\r\n  \"fullPrice\": 35.50,\r\n  \"halfPrice\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/sessions",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Movies",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/movies",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Theaters",
+			"item": [
+				{
+					"name": "Theaters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/theaters",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Theaters",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"capacity\": 1,\r\n  \"type\": \"standard\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/theaters",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDI2NDE0ZTMwNjk0OTlhMGUxMGJmMSIsImlhdCI6MTc2MTg0NTQwNSwiZXhwIjoxNzYxOTMxODA1fQ.HAGsyD3KI95qWmrd0Ru5dAxUdGX23RI6z70v6uul5vA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		},
+		{
+			"key": "newUserName",
+			"value": ""
+		},
+		{
+			"key": "newUserEmail",
+			"value": ""
+		},
+		{
+			"key": "newUserPassword",
+			"value": ""
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "adminEmail",
+			"value": ""
+		},
+		{
+			"key": "emailParaDuplicar",
+			"value": ""
+		}
+	]
+}
