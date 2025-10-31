@@ -9,32 +9,49 @@ Olá! Eu sou **Ana Lívia**, tenho 20 anos e estou cursando o quinto semestre de
 ## 📁 Estrutura de Pastas
 
 ```plaintext
-testes/
-├── ui/
-│   ├── 01_auth.robot
-│   ├── 02_home_nav.robot
-│   ├── 03_fluxo_filmes.robot
-│   └── 04_fluxo_reserva.robot
-│
-├── api/
-│   ├── 01_auth_api.robot
-│   ├── 02_movies_api.robot
-│   └── 03_reserva_api.robot
-│
-├── resources/
-│   ├── common_keywords.robot
-│   ├── ui_keywords.robot
-│   ├── api_keywords.robot
-│   └── variables.robot
+desafio final estagio/
+├── testes/
+│   ├── ui/
+│   │   ├── 01_auth.robot
+│   │   ├── 02_home_nav.robot
+│   │   ├── 03_fluxo_filmes.robot
+│   │   └── 04_fluxo_reserva.robot
+│   │
+│   ├── api/
+│   │   ├── 01_auth_api.robot
+│   │   ├── 02_movies_api.robot
+│   │   └── 03_reserva_api.robot
+│   │
+│   └── resources/
+│       ├── keywords.robot
+│       └── variables.robot
 │
 ├── documentacao/
-│   └── imagens/
-│   └── bugs.md
-│   └── historias_de_usuario.md
-│   └── mapas-mentais.md
+│   ├── imagens/
+│   │   ├── ApiInfo.png
+│   │   ├── Authentication.png
+│   │   ├── Movies.png
+│   │   ├── Reservations.png
+│   │   ├── Sessions.png
+│   │   ├── Setup.png
+│   │   ├── Theaters.png
+│   │   └── Users.png
+│   ├── bugs.md
+│   ├── historias_de_usuario.md
+│   ├── mapas-mentais.md
 │   └── plano_de_testes.md
-│   
+│
+├── cinema/
+│   ├── cinema-challenge-back-main/
+│   └── cinema-challenge-front-main/
+│
+├── results/
+│   ├── report.html
+│   ├── log.html
+│   └── output.xml
+│
 ├── .gitignore
+├── Cinema App API.postman_collection.json
 ├── README.md
 └── requirements.txt
 ```
